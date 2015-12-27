@@ -1,5 +1,6 @@
 import rhinoscriptsyntax as rs
 import random as r
+import perlin as p
 
 # set the random seed for the sketch
 # defaults to 1, range between 0 and 10
@@ -11,8 +12,7 @@ class Walker:
     def __init__(self):
         self.x = 0
         self.y = 0
-        self.z = 0      
-        
+        self.z = 0 
         
     def location(self):
         shape = rs.AddPoint(self.x, self.y, self.z)
