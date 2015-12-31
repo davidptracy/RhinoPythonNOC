@@ -19,19 +19,23 @@ class Walker:
     def location(self):
         shape = rs.AddPoint(self.x, self.y, self.z)
         return shape
-        
-timerX1 = 6
-timerX2 = 40
-timerY1 = 1000
-timerY2 = 200
-timerZ1 = 76
-timerZ2 = 0
+
+#time parameters to pass into the noise2d function
+timerX1 = r.randint(0,1000)
+timerX2 = r.randint(0,1000)
+
+timerY1 = r.randint(0,1000)
+timerY2 = r.randint(0,1000)
+
+timerZ1 = r.randint(0,1000)
+timerZ2 = r.randint(0,1000)
 
 w = Walker()
 points = []
 parameters = []
 radii = []
 
+#take 500 steps 
 for t in range(500):
     
     noise1 = p.SimplexNoise().noise2(timerX1, timerX2)
@@ -47,7 +51,8 @@ for t in range(500):
     timerY2 += .0125
     timerZ1 += .0125
     timerZ2 += .0125
-    
+
+#create a curve object to 
 curve = rs.AddCurve(points, degree=3)
 
 #create a bunch of radii that match the amount of points
@@ -57,6 +62,7 @@ for point in points:
     radii.append(tempRadius)
     parameters.append(parameterCounter)
     parameterCounter += 1/len(points)
-    
-# add a pipe through all the points?
+
+# add a pipe through all the points
+# normalized curve parameters at which to place the radius
 rs.AddPipe(curve, parameters, radii, 1, 2, False)
