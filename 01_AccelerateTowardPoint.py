@@ -24,16 +24,12 @@ class Mover:
         self.location = _location
         self.velocity = _velocity
         self.acceleration = _acceleration
-    def update(self):
-        
-        attractor = rs.VectorCreate([width/2, depth/2, height/2],[0,0,0])
-        direction = rs.VectorSubtract(attractor, self.location)
-        
+        self.attractor = rs.VectorCreate([width/2, depth/2, height/2],[0,0,0])
+    def update(self):        
+        direction = rs.VectorSubtract(self.attractor, self.location)
         direction = rs.VectorUnitize(direction)
-        direction = rs.VectorScale(direction, 0.5)
-        
-        self.acceleration = direction
-        
+        direction = rs.VectorScale(direction, 0.5)       
+        self.acceleration = direction        
         self.velocity = rs.VectorAdd(self.velocity,self.acceleration)
         self.location = rs.VectorAdd(self.location,self.velocity)
         
@@ -61,13 +57,21 @@ class Mover:
             self.velocity[2] = self.velocity[2]*-1
 
     def display(self):
-        dist = height - self.location[2]
-        self.sphere = rs.AddSphere(self.location, dist/10)
+        dist = rs.VectorLength(rs.VectorSubtract(self.location, self.attractor))
+        self.sphere = rs.AddSphere(self.location, 10/dist)
 
-mover = Mover(location, velocity, acceleration)
+movers = []
+
+for m in range(5):
+    location = rs.VectorCreate([random.uniform(0,width),random.uniform(0,depth),random.uniform(0,height)],[0,0,0])
+    velocity     = rs.VectorCreate([random.uniform(-1,1),random.uniform(-1,1),random.uniform(-1,1)],[0,0,0])
+    mover = Mover(location, velocity, acceleration)
+    movers.append(mover)
+
 
 for t in range(100):
     
-    mover.update()
-    mover.checkEdges()
-    mover.display()
+    for mover in movers:
+        mover.update()
+        mover.checkEdges()
+        mover.display()
