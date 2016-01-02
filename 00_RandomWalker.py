@@ -1,6 +1,5 @@
 import rhinoscriptsyntax as rs
 import random as r
-import perlin as p
 
 # set the random seed for the sketch
 # defaults to 1, range between 0 and 10
@@ -28,8 +27,6 @@ class Walker:
         
         stepZ = r.uniform(-1,1)
         self.z += stepZ
-        
-     
 
 for s in range(5):
     r.seed(s)
@@ -48,7 +45,6 @@ for s in range(5):
     rs.AddPolyline(points, replace_id=None)
     # add a degree 3 nurbs curve through the entire list of a
     curve = rs.AddCurve(points, degree=3)
-    
     #create a bunch of radii that match the amount of points
     parameterCounter = 0
     for point in points:
