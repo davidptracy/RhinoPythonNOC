@@ -27,6 +27,7 @@ class Mover:
     def update(self):
         self.velocity = rs.VectorAdd(self.velocity,self.acceleration)
         self.location = rs.VectorAdd(self.location,self.velocity)
+        
     def checkEdges(self):
         
         if self.location[0] < 0:
@@ -51,11 +52,12 @@ class Mover:
             self.velocity[2] = self.velocity[2]*-1
 
     def display(self):
-        self.sphere = rs.AddSphere(self.location, 1.0)
+        dist = height - self.location[2]
+        self.sphere = rs.AddSphere(self.location, dist/10)
 
 mover = Mover(location, velocity, acceleration)
 
-for t in range(250):
+for t in range(100):
     
     mover.update()
     mover.checkEdges()
