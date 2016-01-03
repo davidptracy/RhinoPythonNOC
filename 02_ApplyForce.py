@@ -61,6 +61,7 @@ class Mover:
 movers = []
 wind = rs.VectorCreate([.05,0.025,0], [0,0,0])
 gravity = rs.VectorCreate([0,0,-.05],[0,0,0])
+#friction = rs.VectorCreate([0,0,0],[0,0,0])
 
 for m in range(5):
     location = rs.VectorCreate([0,0,height],[0,0,0])
@@ -70,11 +71,29 @@ for m in range(5):
     mover = Mover(location, velocity)
     movers.append(mover)
 
-for t in range(100):
+for t in range(1000):
     
     for mover in movers:
-        mover.update()
+        
+#        coeff = 0.01
+        
+        print type(mover.velocity)
+        
+#        friction = mover.velocity
+#        print rs.VectorCompare(friction, [0,0,0])
+#        
+#        if (rs.VectorCompare(friction, [0,0,0])):
+#            print "YES"
+#            print type(friction)
+#            friction = rs.VectorScale(friction, -1)
+#            print "Scaled -1 ", friction
+#            friction = rs.VectorUnitize(friction)
+#            print "Unitized ", friction     
+#            mover.applyForce(friction)
+        
         mover.applyForce(wind)
         mover.applyForce(gravity)
-        mover.checkEdges()
+        
+        mover.update()
         mover.display()
+        mover.checkEdges()
