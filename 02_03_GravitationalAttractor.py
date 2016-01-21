@@ -5,9 +5,9 @@ import random
 #Bouncing Ball Sketch
 
 #global variables
-width  = 500
-depth  = 200
-height = 50
+width  = 20
+depth  = 20
+height = 20
 
 # Rectangles to indicate boundaries
 basePlane = rs.PlaneFromPoints([0,0,0], [1,0,0], [0,1,0])
@@ -23,15 +23,28 @@ class Attractor:
         self.mass = random.uniform(10,20)
         self.G = 0.4
     def display(self):
-        rs.AddSphere(self.location, self.mass*2)
+        rs.AddSphere(self.location, self.mass/2)
     def attract(self, _mover):
         if rs.VectorCompare(self.location, _mover.location):
             force = rs.VectorSubtract(self.location, _mover.location)
             distance = rs.VectorLength(force)
+            distance = self.constrain(distance, 20.0, 50.0 )
+            print "Constrained Distance : ", distance
             force = rs.VectorUnitize(force)
-            strength = (self.G * self.mass * _mover.mass)
+            strength = (self.G * self.mass * _mover.mass) / (distance * distance)
             force = rs.VectorScale(force, strength)
             return force
+            
+    def constrain(self, value, minVal, maxVal):
+        if value < minVal:
+            print "MinVal returned: ", minVal
+            return minVal
+        elif value > maxVal:
+            print "MaxVal returned: ", maxVal
+            return maxVal
+        else:
+            print "Val returned: ", value
+            return value
 
 class Mover:
     def __init__(self, _location, _velocity):
@@ -87,10 +100,10 @@ class Mover:
 movers = []
 
 attractor1 = Attractor(rs.VectorCreate([width/2, depth/2, height/2],[0,0,0]))
-attractor2 = Attractor(rs.VectorCreate([width/4, depth/4, height/4],[0,0,0]))
+#attractor2 = Attractor(rs.VectorCreate([width/4, depth/4, height/4],[0,0,0]))
 
 attractor1.display()
-attractor2.display()
+#attractor2.display()
 
 wind = rs.VectorCreate([.05,0.025,0], [0,0,0])
 gravity = rs.VectorCreate([0,0,-.05],[0,0,0])
@@ -104,14 +117,11 @@ for m in range(5):
     mover = Mover(location, velocity)
     movers.append(mover)
 
-for t in range(100):
+for t in range(250):
     
     for mover in movers:
         
-        coeff = 0.01
-        
-        print type(mover.velocity)
-        
+        coeff = 0.01        
 #        friction = mover.velocity
 #        print rs.VectorCompare(friction, [0,0,0])
 #        
@@ -126,13 +136,13 @@ for t in range(100):
         
         gravityForce = attractor1.attract(mover)
         mover.applyForce(gravityForce)
-        gravityForce = attractor2.attract(mover)
-        mover.applyForce(gravityForce)
+#        gravityForce = attractor2.attract(mover)
+#        mover.applyForce(gravityForce)
         
         
 #        mover.applyForce(wind)
 #        mover.applyForce(gravity)
         
         mover.update()
-        mover.checkEdges()
+#        mover.checkEdges()
         mover.display()
