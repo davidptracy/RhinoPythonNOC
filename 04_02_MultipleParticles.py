@@ -8,7 +8,7 @@ class Particle:
         self.location = _startPoint
         self.velocity = rs.VectorCreate([random.uniform(-1,1),random.uniform(-1,1),random.uniform(1,2)],[0,0,0])
         self.acceleration = rs.VectorCreate([0,0,-0.005],[0,0,0])
-        self.lifeSpan = random.uniform(200,300)
+        self.lifeSpan = random.uniform(500,3000)
         
     def run(self):
         self.update()
@@ -20,7 +20,7 @@ class Particle:
         self.lifeSpan -= 2.0
         
     def display(self):
-        self.sphere = rs.AddSphere(self.location, 5.0)
+        self.point = rs.AddPoint(self.location, 5.0)
         
     def isDead(self):
         if (self.lifeSpan < 0.0):
@@ -33,12 +33,12 @@ particles = []
 
 #particle = Particle(rs.VectorCreate([20,20,20],[0,0,0]))
 
-for p in range(20):
+for p in range(200):
     p = Particle(rs.VectorCreate([20,20,20],[0,0,0])) 
     particles.append(p)
 
             
-for t in range(500):
+for t in range(5000):
 #   create a copy of the particles list first  
 #   So when you modify the original list,
 #   you do not modify the copy that you iterate over
